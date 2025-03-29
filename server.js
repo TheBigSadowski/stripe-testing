@@ -1,5 +1,5 @@
-const YOUR_DOMAIN = process.env.DOMAIN || 'http://localhost:4242';
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 4242;
+const YOUR_DOMAIN = process.env.DOMAIN || `http://localhost:${PORT}`;
 
 const stripeKey = process.env.STRIPE_KEY;
 const stripe = require('stripe')(stripeKey);
@@ -35,6 +35,6 @@ app.post('/create-checkout-session', async (req, res) => {
   res.redirect(303, session.url);
 });
 
-app.listen(3000, () => console.log('Running on port 3000'));
+app.listen(PORT, () => console.log(`Running on port ${PORT}`));
 
 module.exports = app;
