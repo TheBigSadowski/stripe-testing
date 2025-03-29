@@ -1,17 +1,22 @@
-// This is your test secret API key.
+const YOUR_DOMAIN = process.env.DOMAIN || 'http://localhost:4242';
+const PORT = process.env.PORT;
+
 const stripeKey = process.env.STRIPE_KEY;
 const stripe = require('stripe')(stripeKey);
 const express = require('express');
 const app = express();
+
+console.log('starting app');
+
 app.use(express.static('public'));
 
-const YOUR_DOMAIN = 'http://localhost:4242';
-
 app.get('/', async (req, res) => {
+  console.log('redirecting from root');
   res.redirect(303, `${YOUR_DOMAIN}/checkout.html`);
 });
 
 app.post('/create-checkout-session', async (req, res) => {
+  console.log('creating checkout session');
   const session = await stripe.checkout.sessions.create({
     line_items: [
       {
@@ -26,7 +31,10 @@ app.post('/create-checkout-session', async (req, res) => {
     automatic_tax: {enabled: true},
   });
 
+  console.log('redirecting to checkout page');
   res.redirect(303, session.url);
 });
 
-app.listen(4242, () => console.log('Running on port 4242'));
+app.listen(3000, () => console.log('Running on port 3000'));
+
+module.exports = app;
